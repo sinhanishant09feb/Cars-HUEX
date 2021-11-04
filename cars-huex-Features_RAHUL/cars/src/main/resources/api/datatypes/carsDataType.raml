@@ -1,0 +1,36 @@
+#%RAML 1.0 DataType
+type: object
+description: Defines properties about cars
+properties:
+  ID:
+    type: string
+  brand?:
+    type: string | nil
+    description: Indicates brand of vehicle
+  model?:
+    type: string | nil
+    description: Indicates model name
+  year?:
+    type: integer
+    description: Indicates manufacturing year
+  price?:
+    type: number | nil
+    description: Indicates total cost of the vehicle
+  transmission?:
+    type: string | nil
+    description: Indicates type of transmission
+  mileage?:
+    type: string | nil
+    description: Indicates mileage of the vehicle
+  fuelType?:
+    type: string | nil
+    description: Indicates fuel type
+  tax?:
+    type: number | nil
+    description: Indicates tax
+  mpg?:
+    type: number | nil
+    description: Indicates miles per gallon
+  engineSize?:
+    type: number | nil
+    description: Indicates engine size of the vehicle

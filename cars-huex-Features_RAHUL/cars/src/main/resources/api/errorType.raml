@@ -1,0 +1,32 @@
+#%RAML 1.0 DataType
+type: object
+description: Error format.
+properties:
+      status: 
+        type: string
+        enum: 
+          - ERROR
+          - FAILED
+          - RECORD_REJECTED
+          - DATA_NOT_FOUND
+          - FILE_NOT_FOUND
+          - VALIDATION_FAILED
+        description: Processing Status.  
+      correlationId: 
+        type: string
+        description: This is a unique identifier value that is attached to requests and messages that allow reference to a particular transaction.  
+      applicationName: 
+        type: string
+        description: API name, in which error occured.      
+      errorCode: 
+        type: string
+        description: Error code from the error, such as HTTP status code, DB Error code, Mule error code.
+      errorCategory: 
+        type: string
+        description: Error category identifier (namespace), such as HTTP, DB, Mule etc.
+      errorType: 
+        type: string
+        description: Error identifier key.
+      errorMessage: 
+        type: string
+        description: Short description of the error occured.

@@ -1,0 +1,61 @@
+#%RAML 1.0 Trait
+queryParameters:
+      ID?:
+        type: integer
+        description: To get the car by id
+      count?:
+        type: integer
+        description: Indicates list of cars information.
+      model?:
+        type: string
+        description: Indicates model of the vehicle.           
+      transmissionType?:
+        enum:
+          - Manual
+          - Automatic
+          - Semi-Auto
+        description: Indicates type of transmission.
+      year?:
+        minLength: 4
+        description: Indicates manufaturing year.
+      priceRange?:
+        type: string
+        description: Indicates highest or lowest price range.
+      minPrice?:
+        type: integer
+        description: Indicates minimum price range helps to filter.
+      maxPrice?:
+        type: integer
+        description: Indicates maximum price range helps to filter.
+      mileageType?:
+        type: string
+        description: Indicates highest or lowest mileage range.
+      minMileage?:
+        type: string
+        description: Indicates minimum mileage range helps to filter.
+      maxMileage?:
+        type: string
+        description: Indicates maximum mileage range helps to filter.
+      fuelType?:
+        enum:
+          - Petrol
+          - Diesel
+          - Hybrid
+          - Electic
+          - Other
+        description: Indicates fuel type of the vehicle.
+      minTax?:
+        type: number
+        description: Indicates minimum tax range helps to filter.
+      maxTax?:
+        type: number
+        description: Indicates maximum price range helps to filter.
+      minmpg?:
+        type: number
+        description: Indicates minimum mpg range helps to filter.
+      maxnmpg?:
+        type: number
+        description: Indicates maximum mpg range helps to filter.
+      engineSize?:
+        type: number
+        description: Indicates engine size of the vehicle

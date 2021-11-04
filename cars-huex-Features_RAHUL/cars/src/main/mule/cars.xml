@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="1915ce28-8b22-4df6-8735-d43e35d1d0ae" >
+		<http:listener-connection host="0.0.0.0" port="8082" />
+	</http:listener-config>
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="eb6fc41f-cd25-44e0-beaa-6983f4d6c963" >
+		<db:generic-connection url="jdbc:postgresql://mulsoft-hu1.cnwunojhu2of.ap-south-1.rds.amazonaws.com:5432/IN2021_1296?sslmode=require" driverClassName="org.postgresql.Driver" user="postgres" password="&lt;,y#8Lq-,9&gt;qRQ*P" />
+	</db:config>
+	<flow name="carsFlow" doc:id="4d1c62e2-740a-4c8d-9d46-88c591751b2e" >
+		<choice doc:name="Choice" doc:id="281531a7-ce3d-46d8-a20a-32785b90fe9c" >
+			<when expression="#[attributes.queryParams.engineSize !=null and attributes.queryParams.count != null]">
+				<db:select doc:name="enginesize and count" doc:id="9afa2ae3-53d3-4422-b3d9-b35141d92a07" config-ref="Database_Config">
+					<db:sql ><![CDATA[select * FROM
+(select * from bmw
+UNION
+select * from audi) as ty
+where ty.engineSize=:engineSize
+Order By ty.price
+limit :count]]></db:sql>
+					<db:input-parameters ><![CDATA[#[{engineSize: attributes.queryParams.engineSize,
+ count: attributes.queryParams.count
+}]]]></db:input-parameters>
+				</db:select>
+			</when>
+			<when expression="#[attributes.queryParams.minMileage != null and attributes.queryParams.count !=null]">
+				<db:select doc:name="Top 5 with req Mileage  " doc:id="893f5e82-fc73-4042-aa3c-fa8527221eee" config-ref="Database_Config">
+					<db:sql ><![CDATA[select * from (
+select * from bmw
+union
+select * from audi) as temp
+where temp.mileage >= :minMileage
+order by temp.mileage desc
+limit :count]]></db:sql>
+					<db:input-parameters ><![CDATA[#[{minMileage: attributes.queryParams.minMileage,
+ count: attributes.queryParams.count
+}]]]></db:input-parameters>
+				</db:select>
+			</when>
+			<when expression="#[attributes.queryParams.'minTax' != null and attributes.queryParams.'count' != null and attributes.queryParams.'fuelType' != null]">
+				<db:select doc:name="cars with Required tax and fuelType" doc:id="12425a46-90e2-4dfd-8027-e5324c3ac013" config-ref="Database_Config">
+					<db:sql ><![CDATA[select * from (select model, year, transmission, fuelType, tax from bmw
+union
+select model, year, transmission, fuelType, tax from audi) as temp
+where temp.fuelType = :fuelType and temp.tax >= :minTax
+order by temp.tax desc
+limit :count]]></db:sql>
+					<db:input-parameters ><![CDATA[#[{minTax: attributes.queryParams.minTax,
+	count: attributes.queryParams.count,
+	fuelType: attributes.queryParams.fuelType
+}]]]></db:input-parameters>
+				</db:select>
+			</when>
+			<when expression="#[attributes.queryParams.transmission != null]">
+				<db:select doc:name="Most expensive bmw and audi with transmission manual" doc:id="dd7c7091-2105-414c-932d-053fe9fba2d5" config-ref="Database_Config">
+					<db:sql ><![CDATA[select model,year from (select * from bmw where transmission = :transmission order by price desc limit 1) as temp
+UNION
+select model,year from (select * from audi where transmission = :transmission order by price desc limit 1) as tempp
+]]></db:sql>
+					<db:input-parameters ><![CDATA[#[{transmission: attributes.queryParams.transmission}]]]></db:input-parameters>
+				</db:select>
+			</when>
+			<otherwise>
+				<db:select doc:name="newest car cheapest price" doc:id="306445a5-f0c3-46dc-8fed-fe2566e0e01b" config-ref="Database_Config">
+					<db:sql ><![CDATA[select * from bmw
+UNION ALL
+select * from audi
+ORDER BY year DESC,price
+limit 1]]></db:sql>
+				</db:select>
+			</otherwise>
+		</choice>
+		<ee:transform doc:name="Transform Message" doc:id="4bf06ad7-aa60-42d0-9176-b2ef2ab8a02b" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

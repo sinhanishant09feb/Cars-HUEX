@@ -1,0 +1,230 @@
+#%RAML 1.0 Library
+usage: This is common library for Mule API Specification Project to define resourceTypes, traits, types,securitySchemes and annotationTypes.
+# Defining common types such as error types, response type.
+
+types:
+  error-type: !include errorType.raml    
+
+resourceTypes:
+  collection:
+    usage: Method defination for resource type.
+    get?:
+      displayName: Retrieve <<resourcePathName | !singularize | !uppercamelcase>> data.
+      description: Returns <<resourcePathName | !singularize | !uppercamelcase>> data
+      responses:
+        200:
+         description: Processed Successfully
+         body:
+           application/json:
+            type: <<get-type>>
+            example: <<get-example>>
+        204:
+         description: No Response
+         body:
+           application/json:
+             type: error-type
+             example: !include examples/noResponseExample.raml
+        400:
+          description: Bad Request
+          body:
+            application/json:
+              type: error-type
+              example: !include examples/badRequestExample.raml
+        401:
+          description: Unauthorized
+          body:
+            application/json:
+              type: error-type
+              example: !include examples/unauthorizedExample.raml
+        404:
+          description: Resource Not found
+          body:
+            application/json:
+              type: error-type
+              example: !include examples/resourceNotFoundExample.raml
+        500:
+          description:  Internal Server Error
+          body:
+            application/json:
+              type: error-type
+              example: !include examples/internalServerErrorExample.raml
+    post?:
+      displayName: Create <<resourcePathName | !singularize | !uppercamelcase>> data.
+      description: Requests the creation of a new <<resourcePathName | !singularize | !uppercamelcase>> data.
+      body:
+          application/json:
+            type: <<post-request-type>>
+            example: <<post-request-example>>
+      responses:
+        201:
+         description: Created Successfully
+         body:
+           application/json:
+              type: <<post-response-type>>
+              example: <<post-response-example>>
+
+        204:
+         description: No Response
+         body:
+           application/json:
+              type: error-type
+              example: !include examples/noResponseExample.raml
+        400:
+          description: Bad Request
+          body:
+            application/json:
+              type: error-type
+              example: !include examples/badRequestExample.raml
+        401:
+          description: Unauthorized
+          body:
+            application/json:
+              type: error-type
+              example: !include examples/unauthorizedExample.raml
+        404:
+          description: Resource Not found
+          body:
+            application/json:
+              type: error-type
+              example: !include examples/resourceNotFoundExample.raml
+        500:
+          description:  Internal Server Error
+          body:
+            application/json:
+              type: error-type
+              example: !include examples/internalServerErrorExample.raml
+    put?:
+      displayName: Replace <<resourcePathName | !singularize | !uppercamelcase>> data
+      description: Requests the replacement of <<resourcePathName | !singularize | !uppercamelcase>> data 
+      body:
+          application/json:
+            type: <<put-request-type>>
+            example: <<put-request-example>>
+      responses:
+        201:
+         description: Replaced Successfully
+         body:
+           application/json:
+              type: <<put-response-type>>
+              example: <<put-response-example>>
+
+        204:
+         description: No Response
+         body:
+           application/json:
+              type: error-type
+              example: !include examples/noResponseExample.raml
+        400:
+          description: Bad Request
+          body:
+            application/json:
+              type: error-type
+              example: !include examples/badRequestExample.raml
+        401:
+          description: Unauthorized
+          body:
+            application/json:
+              type: error-type
+              example: !include examples/unauthorizedExample.raml
+        404:
+          description: Resource Not found
+          body:
+            application/json:
+              type: error-type
+              example: !include examples/resourceNotFoundExample.raml
+        500:
+          description:  Internal Server Error
+          body:
+            application/json:
+              type: error-type
+              example: !include examples/internalServerErrorExample.raml
+    patch?:
+      displayName: Modify <<resourcePathName | !singularize | !uppercamelcase>> data
+      description: Requests the modification of <<resourcePathName | !singularize | !uppercamelcase>> data  
+      body:
+          application/json:
+            type: <<patch-request-type>>
+            example: <<patch-request-example>>
+      responses:
+        200:
+         description: Modified Successfully
+         body:
+           application/json:
+              type: <<patch-response-type>>
+              example: <<patch-response-example>>
+
+        204:
+         description: No Response
+         body:
+           application/json:
+              type: error-type
+              example: !include examples/noResponseExample.raml
+        400:
+          description: Bad Request
+          body:
+            application/json:
+              type: error-type
+              example: !include examples/badRequestExample.raml
+        401:
+          description: Unauthorized
+          body:
+            application/json:
+              type: error-type
+              example: !include examples/unauthorizedExample.raml
+        404:
+          description: Resource Not found
+          body:
+            application/json:
+              type: error-type
+              example: !include examples/resourceNotFoundExample.raml
+        500:
+          description:  Internal Server Error
+          body:
+            application/json:
+              type: error-type
+              example: !include examples/internalServerErrorExample.raml
+    delete?:
+      displayName: Delete <<resourcePathName | !singularize | !uppercamelcase>> data
+      description: Requests the deletion of <<resourcePathName | !singularize | !uppercamelcase>> data  
+      body:
+          application/json:
+            type: <<del-request-type>>
+            example: <<del-request-example>>
+      responses:
+        200:
+         description: Deleted Successfully
+         body:
+           application/json:
+              type: <<del-response-type>>
+              example: <<del-response-example>>
+
+        204:
+         description: No Response
+         body:
+           application/json:
+              type: error-type
+              example: !include examples/noResponseExample.raml
+        400:
+          description: Bad Request
+          body:
+            application/json:
+              type: error-type
+              example: !include examples/badRequestExample.raml
+        401:
+          description: Unauthorized
+          body:
+            application/json:
+              type: error-type
+              example: !include examples/unauthorizedExample.raml
+        404:
+          description: Resource Not found
+          body:
+            application/json:
+              type: error-type
+              example: !include examples/resourceNotFoundExample.raml
+        500:
+          description:  Internal Server Error
+          body:
+            application/json:
+              type: error-type
+              example: !include examples/internalServerErrorExample.raml

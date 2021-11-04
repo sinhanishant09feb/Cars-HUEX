@@ -1,0 +1,40 @@
+#%RAML 1.0
+title: CarsInfoAPI
+version: v1
+baseUri: http://carsinfo.com/
+mediaType: 
+- application/json
+
+documentation:
+  - title: CarsInfo documentation
+    content: CarsInfo is an API to retrieve details about various car brands.
+protocols: HTTPS
+
+uses:
+  common-lib: common-lib.raml
+
+traits:
+  query-params: !include /traits/traits.raml
+
+types:
+  cars: !include datatypes/carsDataType.raml
+
+/cars:
+  is: 
+    - query-params
+  get:
+  type:
+    common-lib.collection:
+      get-type: cars[]
+      get-example: !include examples/carsExample.raml 
+  /brand:
+    /{brand}:
+      uriParameters:
+        brand: 
+          description: Used to filter cars by brand.
+          type: string
+      get:
+      type:   
+        common-lib.collection:
+          get-type: cars[]
+          get-example: !include examples/carsExample.raml
